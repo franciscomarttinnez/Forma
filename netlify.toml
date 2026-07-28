@@ -1,8 +1,10 @@
 [build]
   command = "npm run build"
+  # Required: must NOT be the site root (Netlify defaults to repo root and breaks Next.js Runtime)
+  publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
-# Next.js Runtime is applied automatically by Netlify for App Router sites.
-# Do not set a static "publish" directory — the adapter handles it.
+# @netlify/plugin-nextjs is enabled from the Netlify UI / auto for Next.js sites.
