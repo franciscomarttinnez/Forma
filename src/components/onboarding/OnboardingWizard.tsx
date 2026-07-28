@@ -201,7 +201,7 @@ export function OnboardingWizard({ mode = "first" }: { mode?: "first" | "new" })
               subtitle={t.onboarding.nameSub}
             >
               <div>
-                <Label htmlFor="routine-name">{t.nutrition.name}</Label>
+                <Label htmlFor="routine-name">{t.onboarding.nameLabel}</Label>
                 <Input
                   id="routine-name"
                   value={name}

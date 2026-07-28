@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Logo } from "@/components/brand/Logo";
 import { useI18n } from "@/components/providers/I18nProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -32,7 +31,7 @@ const featureMeta = [
   {
     id: "routine",
     image:
-      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80",
   },
   {
     id: "coach",
@@ -116,18 +115,26 @@ export function LandingPage({ isAuthenticated, appHref }: LandingPageProps) {
           animate="show"
           className="flex w-full max-w-2xl flex-col items-center"
         >
-          <motion.div variants={item}>
+          <motion.div variants={item} className="flex w-full justify-center">
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="relative w-[min(100%,14rem)] sm:w-[17rem] md:w-[20rem]"
             >
-              <Logo variant="hero" showWordmark={false} />
+              <Image
+                src="/brand/logo-wordmark-home.png"
+                alt="Forma"
+                width={368}
+                height={162}
+                priority
+                className="h-auto w-full object-contain"
+              />
             </motion.div>
           </motion.div>
 
           <motion.h1
             variants={item}
-            className="mt-8 font-display text-[1.65rem] font-semibold leading-[1.2] tracking-[-0.02em] text-foreground sm:text-4xl md:text-5xl"
+            className="mt-6 font-display text-[1.65rem] font-semibold leading-[1.2] tracking-[-0.02em] text-foreground sm:mt-8 sm:text-4xl md:text-5xl"
           >
             <span className="block whitespace-nowrap">
               {t.marketing.heroLine1}
