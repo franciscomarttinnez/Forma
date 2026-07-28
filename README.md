@@ -4,9 +4,6 @@
 
 This project is designed as a **production-quality portfolio piece**: clean UX, scalable architecture, TypeScript end-to-end, and real auth + database — not a throwaway demo.
 
-> **Brand:** orange `#ffa62b`, black, white, and neutrals. Primary mark: stylized **F** (see [`public/brand/`](public/brand/)).
-
----
 
 ## Table of contents
 
