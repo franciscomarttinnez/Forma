@@ -39,6 +39,10 @@ export function isFutureDate(date: string, today = todayKey()) {
   return date > today;
 }
 
+export function isTodayDate(date: string, today = todayKey()) {
+  return date === today;
+}
+
 export function logsForRoutine(logs: WorkoutLog[], routineId: string) {
   return logs.filter((l) => l.routineId === routineId);
 }
@@ -54,9 +58,9 @@ function statusMap(logs: WorkoutLog[]) {
 /**
  * Current streak for a plan:
  * - trained → +1
- * - rest → continues (no +1)
+ * - rest → continues (no +1, does not break)
  * - skipped or empty day → breaks
- * Starts from today if logged, else yesterday (grace).
+ * Starts from today if logged, else yesterday (grace for today).
  */
 export function currentPlanStreak(
   logs: WorkoutLog[],

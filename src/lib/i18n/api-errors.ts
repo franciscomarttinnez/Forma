@@ -48,8 +48,12 @@ export const apiErrors = {
     es: "La lista de ejercicios no coincide con el día.",
   },
   calendarPastOnly: {
-    en: "You can only check in for today or past days.",
-    es: "Solo podés fichar hoy o días pasados.",
+    en: "You can only check in for today.",
+    es: "Solo podés fichar el día de hoy.",
+  },
+  calendarTodayOnlyEdit: {
+    en: "You can only edit today's check-in.",
+    es: "Solo podés editar la ficha de hoy.",
   },
   calendarPickDay: {
     en: "Choose which routine day you completed.",

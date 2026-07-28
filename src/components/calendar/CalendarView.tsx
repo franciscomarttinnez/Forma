@@ -9,6 +9,7 @@ import { Label, Textarea } from "@/components/ui/Input";
 import {
   computeStreaks,
   isFutureDate,
+  isTodayDate,
   todayKey,
 } from "@/lib/calendar/streaks";
 import type { WorkoutLog, WorkoutStatus } from "@/lib/profile/preferences";
@@ -115,6 +116,7 @@ export function CalendarView() {
 
   const selectedLog = selectedKey ? logByDate.get(selectedKey) : undefined;
   const selectedIsFuture = selectedKey ? isFutureDate(selectedKey, today) : false;
+  const selectedIsToday = selectedKey ? isTodayDate(selectedKey, today) : false;
   const trackingSince = useMemo(() => {
     if (!logs.length) return null;
     return logs.map((l) => l.date).sort()[0] ?? null;
@@ -159,18 +161,19 @@ export function CalendarView() {
       return;
     }
     const existing = logByDate.get(selectedKey);
+    const canEdit = isTodayDate(selectedKey, today);
     if (existing) {
       setEditing(false);
       setStatus(existing.status ?? "trained");
       setDayName(existing.dayName ?? "");
       setNote(existing.note ?? "");
     } else {
-      setEditing(true);
+      setEditing(canEdit);
       setStatus("trained");
       setDayName(selectedRoutine?.days[0]?.name ?? "");
       setNote("");
     }
-  }, [selectedKey, logByDate, selectedRoutine]);
+  }, [selectedKey, logByDate, selectedRoutine, today]);
 
   async function changeRoutine(nextId: string) {
     setSelectedKey(null);
@@ -192,7 +195,7 @@ export function CalendarView() {
 
   async function saveCheckIn() {
     if (!selectedKey || !routineId) return;
-    if (isFutureDate(selectedKey, today)) {
+    if (!isTodayDate(selectedKey, today)) {
       setError(t.calendar.futureOnlyPast);
       return;
     }
@@ -229,6 +232,10 @@ export function CalendarView() {
 
   async function removeCheckIn() {
     if (!selectedKey || !routineId) return;
+    if (!isTodayDate(selectedKey, today)) {
+      setError(t.calendar.pastLocked);
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -285,7 +292,7 @@ export function CalendarView() {
     );
   }
 
-  const showForm = !selectedIsFuture && (editing || !selectedLog);
+  const showForm = selectedIsToday && (editing || !selectedLog);
 
   return (
     <div className="mx-auto max-w-md space-y-5">
@@ -481,10 +488,14 @@ export function CalendarView() {
               </p>
             ) : null}
 
-            {!selectedLog && selectedKey === today ? (
+            {!selectedLog && selectedIsToday ? (
               <p className="mt-2 text-sm text-muted">
                 {t.calendar.canCheckIn}
               </p>
+            ) : null}
+
+            {selectedLog && !selectedIsToday && !selectedIsFuture ? (
+              <p className="mt-2 text-sm text-muted">{t.calendar.pastLocked}</p>
             ) : null}
 
             {selectedLog && !editing ? (
@@ -514,22 +525,26 @@ export function CalendarView() {
                   <p className="text-sm text-muted">{t.calendar.noNote}</p>
                 )}
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    disabled={busy}
-                    onClick={() => setEditing(true)}
-                  >
-                    {t.calendar.editLog}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    disabled={busy}
-                    onClick={() => void removeCheckIn()}
-                  >
-                    {t.calendar.remove}
-                  </Button>
+                  {selectedIsToday ? (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        disabled={busy}
+                        onClick={() => setEditing(true)}
+                      >
+                        {t.calendar.editLog}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        disabled={busy}
+                        onClick={() => void removeCheckIn()}
+                      >
+                        {t.calendar.remove}
+                      </Button>
+                    </>
+                  ) : null}
                   <Button
                     size="sm"
                     variant="ghost"

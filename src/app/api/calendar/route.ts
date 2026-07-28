@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import {
   computeStreaks,
-  isFutureDate,
+  isTodayDate,
   logsForRoutine,
+  todayKey,
 } from "@/lib/calendar/streaks";
 import {
   parsePreferences,
@@ -146,9 +147,9 @@ export async function POST(request: Request) {
     }
 
     const body = upsertSchema.parse(await request.json());
-    if (isFutureDate(body.date)) {
+    if (!isTodayDate(body.date, todayKey())) {
       return NextResponse.json(
-        { error: "You can only check in for today or past days." },
+        { error: "You can only check in for today." },
         { status: 400 },
       );
     }
@@ -219,6 +220,12 @@ export async function DELETE(request: Request) {
     }
 
     const body = deleteSchema.parse(await request.json());
+    if (!isTodayDate(body.date, todayKey())) {
+      return NextResponse.json(
+        { error: "You can only edit today's check-in." },
+        { status: 400 },
+      );
+    }
     const { preferences } = await readPrefs(user.id);
     const workoutLogs = preferences.workoutLogs.filter(
       (l) => !(l.date === body.date && l.routineId === body.routineId),
