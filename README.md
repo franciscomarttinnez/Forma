@@ -1,5 +1,7 @@
 # Forma
 
+LIVE DEMO🌐🟢: formatrainer.netlify.app
+
 **Forma** is a modern web app for personalized fitness coaching. Instead of generic workout plans from the internet, users answer a short questionnaire and get a routine tailored to their goals, experience, schedule, equipment, injuries, and preferences — then refine it with an in-app coach.
 
 This project is designed as a **production-quality portfolio piece**: clean UX, scalable architecture, TypeScript end-to-end, and real auth + database — not a throwaway demo.
