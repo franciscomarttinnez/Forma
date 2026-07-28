@@ -79,7 +79,8 @@ export const VERIFIED_MEDIA: Record<
 };
 
 export function gifProxyUrl(id: string) {
-  return `/api/exercises/gif?id=${encodeURIComponent(id)}`;
+  // Path-based (not ?id=) so Netlify CDN doesn't serve one GIF for every exercise
+  return `/api/exercises/gif/${encodeURIComponent(id)}`;
 }
 
 export function localMediaForName(name: string): ExerciseDbExercise | null {
